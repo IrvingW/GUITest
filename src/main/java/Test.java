@@ -7,8 +7,10 @@ import org.openqa.selenium.support.ui.Select;
 import java.util.List;
 
 public class Test {
+    private static String driver_path = "chromedriver.exe";
+    private static String upload_file_path = "E:\\worksapce\\IntelliJ\\GUITest\\upload_sample.pdf";
     public static void main(String[] args){
-        System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", driver_path);
         WebDriver driver = new ChromeDriver();
         driver.get("https://wj.qq.com/s/2123779/5eb8");
         //driver.manage().window().maximize();
@@ -70,7 +72,40 @@ public class Test {
         //Print a Log In message to the screen
         System.out.println(" The Result is " + result);
 
+        // question 5
+        driver.findElement(By.name("file")).sendKeys(upload_file_path);
+        try {
+            Thread.sleep(1000);
+        }catch (InterruptedException e) {
+            System.out.println("interrupted");
+        }
+        WebElement question5  = driver.findElement(By.id("question_q-5-1qvt"));
+        WebElement uploaded = question5.findElement(By.className("uploaded"));
+        while(true){
+            String finish = uploaded.getAttribute("style");
+            if(finish.equals("display: block;"))
+                break;  // finish upload
+            else{   // sleep 1s and check again when wake up
+                System.out.println("uploading.....");
+                try {
+                    Thread.sleep(1000);
+                }catch (InterruptedException e) {
+                    System.out.println("interrupted");
+                }
+            }
 
+        }
+        // take a break
+        try {
+            Thread.sleep(1000);
+        }catch (InterruptedException e) {
+            System.out.println("interrupted");
+        }
+
+        // submit
+        WebElement control = driver.findElement(By.className("survey_control"));
+        WebElement button = control.findElement(By.className("survey_submit"));
+        button.click();
         System.out.println("End.");
     }
 }
